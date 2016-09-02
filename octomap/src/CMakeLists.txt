@@ -9,6 +9,7 @@ SET (octomap_SRCS
   OcTreeStamped.cpp
   ColorOcTree.cpp
   LabelOccupancyOcTreeNode.cpp
+  LabelOccupancyOcTree.cpp
   )
 
 # dynamic and static libs, see CMake FAQ:
