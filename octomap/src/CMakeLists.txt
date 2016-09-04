@@ -6,6 +6,7 @@ SET (octomap_SRCS
   ScanGraph.cpp
   CountingOcTree.cpp
   OcTree.cpp
+  OcTreeDataNode.cpp
   OcTreeNode.cpp
   OcTreeStamped.cpp
   ColorOcTree.cpp
