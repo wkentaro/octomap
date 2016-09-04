@@ -87,6 +87,26 @@ namespace octomap
     return log(mean / (std::valarray<double>(1, mean.size()) - mean));
   }
 
+  std::valarray<double> LabelOccupancyOcTreeNode::getMaxChildLogOdds() const
+  {
+    std::valarray<double> maxLogOdds;
+    double maxOccupancy = -std::numeric_limits<float>::max();
+
+    if (children !=NULL){
+      for (unsigned int i=0; i<8; i++) {
+        if (children[i] != NULL) {
+          std::valarray<double> l = static_cast<LabelOccupancyOcTreeNode*>(children[i])->getLogOdds(); // TODO check if works generally
+          if (l.max() > maxOccupancy)
+          {
+            maxOccupancy = l.max();
+            maxLogOdds = l;
+          }
+        }
+      }
+    }
+    return maxLogOdds;
+  }
+
   void LabelOccupancyOcTreeNode::addValue(const std::valarray<double> logOdds)
   {
     value += logOdds;

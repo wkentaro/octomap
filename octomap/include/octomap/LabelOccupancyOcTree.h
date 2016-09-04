@@ -31,20 +31,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef OCTOMAP_LABELOCCUPANCYOCTREE_H
-#define OCTOMAP_LABELOCCUPANCYOCTREE_H
+#ifndef OCTOMAP_LABEL_OCCUPANCY_OCTREE_H
+#define OCTOMAP_LABEL_OCCUPANCY_OCTREE_H
 
-#include "OccupancyOcTreeBase.h"
+#include "LabelOccupancyOcTreeBase.h"
 #include "octomap_types.h"
 #include "octomap_utils.h"
-#include "OcTreeDataNode.h"
+#include "LabelOccupancyOcTreeNode.h"
 #include <limits>
 #include <valarray>
 
 namespace octomap
 {
 
-  class LabelOccupancyOcTree : public OccupancyOcTreeBase<LabelOccupancyOcTreeNode>
+  class LabelOccupancyOcTree : public LabelOccupancyOcTreeBase<LabelOccupancyOcTreeNode>
   {
   public:
     /// Default constructor, sets resolution of leafs and number of labels
@@ -58,9 +58,6 @@ namespace octomap
     std::string getTreeType() const { return "LabelOccupancyOcTree"; }
 
   protected:
-    // Number of labels
-    int n_label;
-
     /**
      * Static member object which ensures that this OcTree's prototype
      * ends up in the classIDMapping only once. You need this as a
@@ -92,4 +89,4 @@ namespace octomap
 
 } // namespace octomap
 
-#endif  // OCTOMAP_LABELOCCUPANCYOCTREE_H
+#endif  // OCTOMAP_LABEL_OCCUPANCY_OCTREE_H

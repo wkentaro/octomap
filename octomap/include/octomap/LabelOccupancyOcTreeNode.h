@@ -83,6 +83,11 @@ namespace octomap
      */
     std::valarray<double> getMeanChildLogOdds() const;
 
+    /**
+     * @return max of all children's occupancy probabilities, in log odds
+     */
+    std::valarray<double> getMaxChildLogOdds() const;
+
     /// update this node's occupancy according to its children's maximum occupancy
     inline void updateOccupancyChildren()
     {
