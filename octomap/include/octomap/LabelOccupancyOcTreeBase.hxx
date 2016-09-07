@@ -1198,6 +1198,7 @@ namespace octomap {
         logOdds[i] = this->clamping_thres_max;
       }
     }
+    occupancyNode->setLogOdds(logOdds);
   }
 
 
