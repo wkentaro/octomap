@@ -47,7 +47,8 @@ namespace octomap
 {
 
   LabelOccupancyOcTreeNode::LabelOccupancyOcTreeNode()
-    : OcTreeDataNode<std::valarray<float> >()
+    : OcTreeDataNode<std::valarray<float> >(),
+      is_value_initialized(false)
   {
   }
 
@@ -109,6 +110,12 @@ namespace octomap
 
   void LabelOccupancyOcTreeNode::addValue(const std::valarray<float>& logOdds)
   {
+    if (!is_value_initialized)
+    {
+      value = std::valarray<float>(0.0, logOdds.size());
+      is_value_initialized = true;
+    }
+    assert(value.size() == logOdds.size());
     value += logOdds;
   }
 

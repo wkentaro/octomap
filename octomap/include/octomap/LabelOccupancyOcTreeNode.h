@@ -100,6 +100,9 @@ namespace octomap
 
   protected:
     // "value" stores log odds occupancy probability
+
+    // To initialize the size of std::valarray with first call of addValue.
+    bool is_value_initialized;
   };
 
 } // namespace octomap
