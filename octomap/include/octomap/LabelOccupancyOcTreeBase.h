@@ -465,7 +465,7 @@ namespace octomap {
   protected:
     /// Constructor to enable derived classes to change tree constants.
     /// This usually requires a re-implementation of some core tree-traversal functions as well!
-    LabelOccupancyOcTreeBase(double resolution, unsigned int tree_depth, unsigned int tree_max_val);
+    LabelOccupancyOcTreeBase(double resolution, int n_label, unsigned int tree_depth, unsigned int tree_max_val);
 
     /**
      * Traces a ray from origin to end and updates all voxels on the

@@ -40,17 +40,21 @@ namespace octomap {
 
   template <class NODE>
   LabelOccupancyOcTreeBase<NODE>::LabelOccupancyOcTreeBase(double resolution, int n_label)
-    : OcTreeBaseImpl<NODE,AbstractLabelOccupancyOcTree>(resolution), use_bbx_limit(false), use_change_detection(false)
+    : OcTreeBaseImpl<NODE,AbstractLabelOccupancyOcTree>(resolution),
+      n_label(n_label),
+      use_bbx_limit(false),
+      use_change_detection(false)
   {
-
   }
-  
-  template <class NODE>
-  LabelOccupancyOcTreeBase<NODE>::LabelOccupancyOcTreeBase(double resolution, unsigned int tree_depth, unsigned int tree_max_val)
-    : OcTreeBaseImpl<NODE,AbstractLabelOccupancyOcTree>(resolution, tree_depth, tree_max_val), use_bbx_limit(false), use_change_detection(false)
-  {
 
-  }  
+  template <class NODE>
+  LabelOccupancyOcTreeBase<NODE>::LabelOccupancyOcTreeBase(double resolution, int n_label, unsigned int tree_depth, unsigned int tree_max_val)
+    : OcTreeBaseImpl<NODE,AbstractLabelOccupancyOcTree>(resolution, tree_depth, tree_max_val),
+      n_label(n_label),
+      use_bbx_limit(false),
+      use_change_detection(false)
+  {
+  }
 
   template <class NODE>
   LabelOccupancyOcTreeBase<NODE>::~LabelOccupancyOcTreeBase(){
@@ -61,6 +65,7 @@ namespace octomap {
   OcTreeBaseImpl<NODE,AbstractLabelOccupancyOcTree>(rhs), use_bbx_limit(rhs.use_bbx_limit),
     bbx_min(rhs.bbx_min), bbx_max(rhs.bbx_max),
     bbx_min_key(rhs.bbx_min_key), bbx_max_key(rhs.bbx_max_key),
+    n_label(rhs.n_label),
     use_change_detection(rhs.use_change_detection), changed_keys(rhs.changed_keys)
   {
     this->clamping_thres_min = rhs.clamping_thres_min;
