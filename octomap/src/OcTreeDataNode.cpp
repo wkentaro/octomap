@@ -38,7 +38,7 @@
 namespace octomap {
 
   template <>
-  bool OcTreeDataNode<std::valarray<double> >::operator== (const OcTreeDataNode<std::valarray<double> >& rhs) const
+  bool OcTreeDataNode<std::valarray<float> >::operator== (const OcTreeDataNode<std::valarray<float> >& rhs) const
   {
     for (size_t i=0; i < rhs.value.size(); i++)
     {

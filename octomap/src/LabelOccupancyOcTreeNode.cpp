@@ -47,7 +47,7 @@ namespace octomap
 {
 
   LabelOccupancyOcTreeNode::LabelOccupancyOcTreeNode()
-    : OcTreeDataNode<std::valarray<double> >()
+    : OcTreeDataNode<std::valarray<float> >()
   {
   }
 
@@ -55,9 +55,9 @@ namespace octomap
   {
   }
 
-  std::valarray<double> LabelOccupancyOcTreeNode::getMeanChildLogOdds() const
+  std::valarray<float> LabelOccupancyOcTreeNode::getMeanChildLogOdds() const
   {
-    std::valarray<double> mean;
+    std::valarray<float> mean;
 
     uint8_t c = 0;
     if (children != NULL)
@@ -66,10 +66,10 @@ namespace octomap
       {
         if (children[i] != NULL)
         {
-          std::valarray<double> occupancy = static_cast<LabelOccupancyOcTreeNode*>(children[i])->getOccupancy();
+          std::valarray<float> occupancy = static_cast<LabelOccupancyOcTreeNode*>(children[i])->getOccupancy();
           if (mean.size() == 0)
           {
-            mean = std::valarray<double>(occupancy.size());
+            mean = std::valarray<float>(occupancy.size());
           }
           else
           {
@@ -81,21 +81,21 @@ namespace octomap
 
     if (c > 0)
     {
-      mean /= static_cast<double>(c);
+      mean /= static_cast<float>(c);
     }
 
-    return log(mean / (std::valarray<double>(1, mean.size()) - mean));
+    return log(mean / (std::valarray<float>(1, mean.size()) - mean));
   }
 
-  std::valarray<double> LabelOccupancyOcTreeNode::getMaxChildLogOdds() const
+  std::valarray<float> LabelOccupancyOcTreeNode::getMaxChildLogOdds() const
   {
-    std::valarray<double> maxLogOdds;
-    double maxOccupancy = -std::numeric_limits<float>::max();
+    std::valarray<float> maxLogOdds;
+    float maxOccupancy = -std::numeric_limits<float>::max();
 
     if (children !=NULL){
       for (unsigned int i=0; i<8; i++) {
         if (children[i] != NULL) {
-          std::valarray<double> l = static_cast<LabelOccupancyOcTreeNode*>(children[i])->getLogOdds(); // TODO check if works generally
+          std::valarray<float> l = static_cast<LabelOccupancyOcTreeNode*>(children[i])->getLogOdds(); // TODO check if works generally
           if (l.max() > maxOccupancy)
           {
             maxOccupancy = l.max();
@@ -107,7 +107,7 @@ namespace octomap
     return maxLogOdds;
   }
 
-  void LabelOccupancyOcTreeNode::addValue(const std::valarray<double> logOdds)
+  void LabelOccupancyOcTreeNode::addValue(const std::valarray<float>& logOdds)
   {
     value += logOdds;
   }

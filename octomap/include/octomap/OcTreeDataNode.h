@@ -131,7 +131,7 @@ namespace octomap {
   };
 
   template <>
-  bool OcTreeDataNode<std::valarray<double> >::operator==(const OcTreeDataNode<std::valarray<double> >& rhs) const;
+  bool OcTreeDataNode<std::valarray<float> >::operator==(const OcTreeDataNode<std::valarray<float> >& rhs) const;
 
 
 } // end namespace

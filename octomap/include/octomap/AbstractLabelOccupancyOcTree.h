@@ -144,7 +144,7 @@ namespace octomap {
      * @return pointer to the updated NODE
      */
     virtual LabelOccupancyOcTreeNode* updateNode(
-        const OcTreeKey& key, std::valarray<double> log_odds_update, bool lazy_eval = false) = 0;
+        const OcTreeKey& key, std::valarray<float>& log_odds_update, bool lazy_eval = false) = 0;
 
     /**
      * Manipulate log_odds value of voxel directly.
@@ -157,7 +157,7 @@ namespace octomap {
      * @return pointer to the updated NODE
      */
     virtual LabelOccupancyOcTreeNode* updateNode(
-        const point3d& value, std::valarray<double> log_odds_update, bool lazy_eval = false) = 0;
+        const point3d& value, std::valarray<float>& log_odds_update, bool lazy_eval = false) = 0;
 
     /**
      * Integrate occupancy measurement.

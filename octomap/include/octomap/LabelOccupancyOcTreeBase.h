@@ -155,7 +155,7 @@ namespace octomap {
       *   This speeds up the insertion, but you need to call updateInnerOccupancy() when done.
       * @return pointer to the updated NODE
       */
-     virtual NODE* setNodeValue(const OcTreeKey& key, std::valarray<double> log_odds_value, bool lazy_eval = false);
+     virtual NODE* setNodeValue(const OcTreeKey& key, std::valarray<float>& log_odds_value, bool lazy_eval = false);
 
      /**
       * Set log_odds value of voxel to log_odds_value.
@@ -167,7 +167,7 @@ namespace octomap {
       *   This speeds up the insertion, but you need to call updateInnerOccupancy() when done.
       * @return pointer to the updated NODE
       */
-     virtual NODE* setNodeValue(const point3d& value, std::valarray<double> log_odds_value, bool lazy_eval = false);
+     virtual NODE* setNodeValue(const point3d& value, std::valarray<float>& log_odds_value, bool lazy_eval = false);
 
      /**
       * Set log_odds value of voxel to log_odds_value.
@@ -181,7 +181,7 @@ namespace octomap {
       *   This speeds up the insertion, but you need to call updateInnerOccupancy() when done.
       * @return pointer to the updated NODE
       */
-     virtual NODE* setNodeValue(double x, double y, double z, std::valarray<double> log_odds_value, bool lazy_eval = false);
+     virtual NODE* setNodeValue(double x, double y, double z, std::valarray<float>& log_odds_value, bool lazy_eval = false);
 
      /**
       * Manipulate log_odds value of a voxel by changing it by log_odds_update (relative).
@@ -193,7 +193,7 @@ namespace octomap {
       *   This speeds up the insertion, but you need to call updateInnerOccupancy() when done.
       * @return pointer to the updated NODE
       */
-     virtual NODE* updateNode(const OcTreeKey& key, std::valarray<double> log_odds_update, bool lazy_eval = false);
+     virtual NODE* updateNode(const OcTreeKey& key, std::valarray<float>& log_odds_update, bool lazy_eval = false);
 
      /**
       * Manipulate log_odds value of a voxel by changing it by log_odds_update (relative).
@@ -205,7 +205,7 @@ namespace octomap {
       *   This speeds up the insertion, but you need to call updateInnerOccupancy() when done.
       * @return pointer to the updated NODE
       */
-     virtual NODE* updateNode(const point3d& value, std::valarray<double> log_odds_update, bool lazy_eval = false);
+     virtual NODE* updateNode(const point3d& value, std::valarray<float>& log_odds_update, bool lazy_eval = false);
 
      /**
       * Manipulate log_odds value of a voxel by changing it by log_odds_update (relative).
@@ -219,7 +219,7 @@ namespace octomap {
       *   This speeds up the insertion, but you need to call updateInnerOccupancy() when done.
       * @return pointer to the updated NODE
       */
-     virtual NODE* updateNode(double x, double y, double z, std::valarray<double> log_odds_update, bool lazy_eval = false);
+     virtual NODE* updateNode(double x, double y, double z, std::valarray<float>& log_odds_update, bool lazy_eval = false);
 
     /**
      * Integrate occupancy measurement.
@@ -455,7 +455,7 @@ namespace octomap {
     /// integrate a "miss" measurement according to the tree's sensor model
     virtual void integrateMiss(NODE* occupancyNode) const;
     /// update logodds value of node by adding to the current value.
-    virtual void updateNodeLogOdds(NODE* occupancyNode, const std::valarray<double> update) const;
+    virtual void updateNodeLogOdds(NODE* occupancyNode, const std::valarray<float>& update) const;
 
     /// converts the node to the maximum likelihood value according to the tree's parameter for "occupancy"
     virtual void nodeToMaxLikelihood(NODE* occupancyNode) const;
@@ -477,10 +477,10 @@ namespace octomap {
     // recursive calls ----------------------------
 
     NODE* updateNodeRecurs(NODE* node, bool node_just_created, const OcTreeKey& key,
-                           unsigned int depth, const std::valarray<double>& log_odds_update, bool lazy_eval = false);
+                           unsigned int depth, const std::valarray<float>& log_odds_update, bool lazy_eval = false);
     
     NODE* setNodeValueRecurs(NODE* node, bool node_just_created, const OcTreeKey& key,
-                           unsigned int depth, const std::valarray<double>& log_odds_value, bool lazy_eval = false);
+                           unsigned int depth, const std::valarray<float>& log_odds_value, bool lazy_eval = false);
 
     void updateInnerOccupancyRecurs(NODE* node, unsigned int depth);
     

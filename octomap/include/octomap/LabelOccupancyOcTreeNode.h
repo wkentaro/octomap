@@ -54,7 +54,7 @@ namespace octomap
    * See ColorOcTreeNode in ColorOcTree.h for an example.
    *
    */
-  class LabelOccupancyOcTreeNode : public OcTreeDataNode<std::valarray<double> >
+  class LabelOccupancyOcTreeNode : public OcTreeDataNode<std::valarray<float> >
   {
   public:
     LabelOccupancyOcTreeNode();
@@ -63,9 +63,9 @@ namespace octomap
     // -- node occupancy  ----------------------------
 
     /// \return occupancy probability of node
-    inline std::valarray<double> getOccupancy() const
+    inline std::valarray<float> getOccupancy() const
     {
-      std::valarray<double> occupancy(value.size());
+      std::valarray<float> occupancy(value.size());
       for (size_t i=0; i < value.size(); i++)
       {
         occupancy[i] = probability(value[i]);
@@ -74,19 +74,19 @@ namespace octomap
     }
 
     /// \return log odds representation of occupancy probability of node
-    inline std::valarray<double> getLogOdds() const { return value; }
+    inline std::valarray<float> getLogOdds() const { return value; }
     /// sets log odds occupancy of node
-    inline void setLogOdds(std::valarray<double> l) { value = l; }
+    inline void setLogOdds(std::valarray<float> l) { value = l; }
 
     /**
      * @return mean of all children's occupancy probabilities, in log odds
      */
-    std::valarray<double> getMeanChildLogOdds() const;
+    std::valarray<float> getMeanChildLogOdds() const;
 
     /**
      * @return max of all children's occupancy probabilities, in log odds
      */
-    std::valarray<double> getMaxChildLogOdds() const;
+    std::valarray<float> getMaxChildLogOdds() const;
 
     /// update this node's occupancy according to its children's maximum occupancy
     inline void updateOccupancyChildren()
@@ -95,7 +95,7 @@ namespace octomap
     }
 
     /// adds p to the node's logOdds value (with no boundary / threshold checking!)
-    void addValue(const std::valarray<double> p);
+    void addValue(const std::valarray<float>& p);
 
 
   protected:

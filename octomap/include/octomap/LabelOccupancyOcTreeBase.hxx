@@ -265,7 +265,7 @@ namespace octomap {
 
   template <class NODE>
   NODE* LabelOccupancyOcTreeBase<NODE>::setNodeValue(
-      const OcTreeKey& key, std::valarray<double> log_odds_value, bool lazy_eval)
+      const OcTreeKey& key, std::valarray<float>& log_odds_value, bool lazy_eval)
   {
     assert(this->n_label == log_odds_value.size());
 
@@ -273,8 +273,8 @@ namespace octomap {
     for (size_t i=0; i < log_odds_value.size(); i++)
     {
       log_odds_value[i] = std::min(
-          std::max(log_odds_value[i], static_cast<double>(this->clamping_thres_min)),
-          static_cast<double>(this->clamping_thres_max));
+          std::max(log_odds_value[i], static_cast<float>(this->clamping_thres_min)),
+          static_cast<float>(this->clamping_thres_max));
     }
 
     bool createdRoot = false;
@@ -290,7 +290,7 @@ namespace octomap {
 
   template <class NODE>
   NODE* LabelOccupancyOcTreeBase<NODE>::setNodeValue(
-      const point3d& value, std::valarray<double> log_odds_value, bool lazy_eval)
+      const point3d& value, std::valarray<float>& log_odds_value, bool lazy_eval)
   {
     assert(this->n_label == log_odds_value.size());
 
@@ -305,7 +305,7 @@ namespace octomap {
 
   template <class NODE>
   NODE* LabelOccupancyOcTreeBase<NODE>::setNodeValue(
-      double x, double y, double z, std::valarray<double> log_odds_value, bool lazy_eval)
+      double x, double y, double z, std::valarray<float>& log_odds_value, bool lazy_eval)
   {
     assert(this->n_label == log_odds_value.size());
 
@@ -321,7 +321,7 @@ namespace octomap {
 
   template <class NODE>
   NODE* LabelOccupancyOcTreeBase<NODE>::updateNode(
-      const OcTreeKey& key, std::valarray<double> log_odds_update, bool lazy_eval)
+      const OcTreeKey& key, std::valarray<float>& log_odds_update, bool lazy_eval)
   {
     assert(this->n_label == log_odds_update.size());
 
@@ -338,7 +338,7 @@ namespace octomap {
 
   template <class NODE>
   NODE* LabelOccupancyOcTreeBase<NODE>::updateNode(
-      const point3d& value, std::valarray<double> log_odds_update, bool lazy_eval)
+      const point3d& value, std::valarray<float>& log_odds_update, bool lazy_eval)
   {
     assert(this->n_label == log_odds_update.size());
 
@@ -353,7 +353,7 @@ namespace octomap {
 
   template <class NODE>
   NODE* LabelOccupancyOcTreeBase<NODE>::updateNode(
-      double x, double y, double z, std::valarray<double> log_odds_update, bool lazy_eval)
+      double x, double y, double z, std::valarray<float>& log_odds_update, bool lazy_eval)
   {
     assert(this->n_label == log_odds_update.size());
 
@@ -369,14 +369,14 @@ namespace octomap {
   template <class NODE>
   NODE* LabelOccupancyOcTreeBase<NODE>::updateNode(const OcTreeKey& key, bool occupied, bool lazy_eval)
   {
-    std::valarray<double> logOdds;
+    std::valarray<float> logOdds;
     if (occupied)
     {
-      logOdds = std::valarray<double>(this->prob_hit_log, this->n_label);
+      logOdds = std::valarray<float>(this->prob_hit_log, this->n_label);
     }
     else
     {
-      logOdds = std::valarray<double>(this->prob_miss_log, this->n_label);
+      logOdds = std::valarray<float>(this->prob_miss_log, this->n_label);
     }
 
     return updateNode(key, logOdds, lazy_eval);
@@ -409,7 +409,7 @@ namespace octomap {
   template <class NODE>
   NODE* LabelOccupancyOcTreeBase<NODE>::updateNodeRecurs(
       NODE* node, bool node_just_created, const OcTreeKey& key,
-      unsigned int depth, const std::valarray<double>& log_odds_update, bool lazy_eval)
+      unsigned int depth, const std::valarray<float>& log_odds_update, bool lazy_eval)
   {
     bool created_node = false;
 
@@ -496,7 +496,7 @@ namespace octomap {
   template <class NODE>
   NODE* LabelOccupancyOcTreeBase<NODE>::setNodeValueRecurs(
       NODE* node, bool node_just_created, const OcTreeKey& key,
-      unsigned int depth, const std::valarray<double>& log_odds_value, bool lazy_eval)
+      unsigned int depth, const std::valarray<float>& log_odds_value, bool lazy_eval)
   {
     bool created_node = false;
 
@@ -1059,40 +1059,40 @@ namespace octomap {
 
 
     // inner nodes default to occupied
-    node->setLogOdds(std::valarray<double>(this->clamping_thres_max, this->n_label));
+    node->setLogOdds(std::valarray<float>(this->clamping_thres_max, this->n_label));
 
     for (unsigned int i=0; i<4; i++) {
       if ((child1to4[i*2] == 1) && (child1to4[i*2+1] == 0)) {
         // child is free leaf
         this->createNodeChild(node, i);
-        this->getNodeChild(node, i)->setLogOdds(std::valarray<double>(this->clamping_thres_min, this->n_label));
+        this->getNodeChild(node, i)->setLogOdds(std::valarray<float>(this->clamping_thres_min, this->n_label));
       }
       else if ((child1to4[i*2] == 0) && (child1to4[i*2+1] == 1)) {
         // child is occupied leaf
         this->createNodeChild(node, i);
-        this->getNodeChild(node, i)->setLogOdds(std::valarray<double>(this->clamping_thres_max, this->n_label));
+        this->getNodeChild(node, i)->setLogOdds(std::valarray<float>(this->clamping_thres_max, this->n_label));
       }
       else if ((child1to4[i*2] == 1) && (child1to4[i*2+1] == 1)) {
         // child has children
         this->createNodeChild(node, i);
-        this->getNodeChild(node, i)->setLogOdds(std::valarray<double>(-200., this->n_label)); // child is unkown, we leave it uninitialized
+        this->getNodeChild(node, i)->setLogOdds(std::valarray<float>(-200., this->n_label)); // child is unkown, we leave it uninitialized
       }
     }
     for (unsigned int i=0; i<4; i++) {
       if ((child5to8[i*2] == 1) && (child5to8[i*2+1] == 0)) {
         // child is free leaf
         this->createNodeChild(node, i+4);
-        this->getNodeChild(node, i+4)->setLogOdds(std::valarray<double>(this->clamping_thres_min, this->n_label));
+        this->getNodeChild(node, i+4)->setLogOdds(std::valarray<float>(this->clamping_thres_min, this->n_label));
       }
       else if ((child5to8[i*2] == 0) && (child5to8[i*2+1] == 1)) {
         // child is occupied leaf
         this->createNodeChild(node, i+4);
-        this->getNodeChild(node, i+4)->setLogOdds(std::valarray<double>(this->clamping_thres_max, this->n_label));
+        this->getNodeChild(node, i+4)->setLogOdds(std::valarray<float>(this->clamping_thres_max, this->n_label));
       }
       else if ((child5to8[i*2] == 1) && (child5to8[i*2+1] == 1)) {
         // child has children
         this->createNodeChild(node, i+4);
-        this->getNodeChild(node, i+4)->setLogOdds(std::valarray<double>(-200., this->n_label)); // set occupancy when all children have been read
+        this->getNodeChild(node, i+4)->setLogOdds(std::valarray<float>(-200., this->n_label)); // set occupancy when all children have been read
       }
       // child is unkown, we leave it uninitialized
     }
@@ -1178,10 +1178,10 @@ namespace octomap {
   //-- Occupancy queries on nodes:
 
   template <class NODE>
-  void LabelOccupancyOcTreeBase<NODE>::updateNodeLogOdds(NODE* occupancyNode, const std::valarray<double> update) const
+  void LabelOccupancyOcTreeBase<NODE>::updateNodeLogOdds(NODE* occupancyNode, const std::valarray<float>& update) const
   {
     occupancyNode->addValue(update);
-    std::valarray<double> logOdds = occupancyNode->getLogOdds();
+    std::valarray<float> logOdds = occupancyNode->getLogOdds();
     for (size_t i=0; i < logOdds.size(); i++)
     {
       if (logOdds[i] < this->clamping_thres_min)
@@ -1199,28 +1199,28 @@ namespace octomap {
   template <class NODE>
   void LabelOccupancyOcTreeBase<NODE>::integrateHit(NODE* occupancyNode) const
   {
-    std::valarray<double> logOdds = std::valarray<double>(this->prob_hit_log, this->n_label);
+    std::valarray<float> logOdds = std::valarray<float>(this->prob_hit_log, this->n_label);
     updateNodeLogOdds(occupancyNode, logOdds);
   }
 
   template <class NODE>
   void LabelOccupancyOcTreeBase<NODE>::integrateMiss(NODE* occupancyNode) const
   {
-    std::valarray<double> logOdds = std::valarray<double>(this->prob_miss_log, this->n_label);
+    std::valarray<float> logOdds = std::valarray<float>(this->prob_miss_log, this->n_label);
     updateNodeLogOdds(occupancyNode, logOdds);
   }
 
   template <class NODE>
   void LabelOccupancyOcTreeBase<NODE>::nodeToMaxLikelihood(NODE* occupancyNode) const
   {
-    std::valarray<double> logOdds;
+    std::valarray<float> logOdds;
     if (this->isNodeOccupied(occupancyNode))
     {
-      logOdds = std::valarray<double>(this->prob_hit_log, this->n_label);
+      logOdds = std::valarray<float>(this->prob_hit_log, this->n_label);
     }
     else
     {
-      logOdds = std::valarray<double>(this->prob_miss_log, this->n_label);
+      logOdds = std::valarray<float>(this->prob_miss_log, this->n_label);
     }
     occupancyNode->setLogOdds(logOdds);
   }
@@ -1228,14 +1228,14 @@ namespace octomap {
   template <class NODE>
   void LabelOccupancyOcTreeBase<NODE>::nodeToMaxLikelihood(NODE& occupancyNode) const
   {
-    std::valarray<double> logOdds;
+    std::valarray<float> logOdds;
     if (this->isNodeOccupied(occupancyNode))
     {
-      logOdds = std::valarray<double>(this->prob_hit_log, this->n_label);
+      logOdds = std::valarray<float>(this->prob_hit_log, this->n_label);
     }
     else
     {
-      logOdds = std::valarray<double>(this->prob_miss_log, this->n_label);
+      logOdds = std::valarray<float>(this->prob_miss_log, this->n_label);
     }
     occupancyNode.setLogOdds(logOdds);
   }
