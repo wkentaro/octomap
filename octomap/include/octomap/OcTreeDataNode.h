@@ -34,6 +34,7 @@
 #ifndef OCTOMAP_OCTREE_DATA_NODE_H
 #define OCTOMAP_OCTREE_DATA_NODE_H
 
+#include <valarray>
 
 #include "octomap_types.h"
 #include "assert.h"
@@ -128,6 +129,10 @@ namespace octomap {
     T value;
 
   };
+
+  template <>
+  bool OcTreeDataNode<std::valarray<unsigned int> >::operator==(
+    const OcTreeDataNode<std::valarray<unsigned int> >& rhs) const;
 
 
 } // end namespace

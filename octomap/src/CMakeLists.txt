@@ -4,8 +4,10 @@ SET (octomap_SRCS
   Pointcloud.cpp
   ScanGraph.cpp
   CountingOcTree.cpp
+  LabelCountingOcTree.cpp
   OcTree.cpp
   OcTreeNode.cpp
+  OcTreeDataNode.cpp
   OcTreeStamped.cpp
   ColorOcTree.cpp
   )
