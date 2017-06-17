@@ -59,6 +59,7 @@ namespace octomap {
     
     inline unsigned int getCount() const { return getValue(); }
     inline void increaseCount() { value++; }
+    inline void decreaseCount() { if (value > 0) value--; }
     inline void setCount(unsigned c) {this->setValue(c); }
 
   };
@@ -78,8 +79,10 @@ namespace octomap {
   public:
     /// Default constructor, sets resolution of leafs
     CountingOcTree(double resolution);
-    virtual CountingOcTreeNode* updateNode(const point3d& value);
-    CountingOcTreeNode* updateNode(const OcTreeKey& k);
+    virtual CountingOcTreeNode* updateNode(
+      const point3d& value, const bool hit=true, const bool reset=false);
+    CountingOcTreeNode* updateNode(
+      const OcTreeKey& k, const bool hit=true, const bool reset=false);
     void getCentersMinHits(point3d_list& node_centers, unsigned int min_hits) const;
 
   protected:

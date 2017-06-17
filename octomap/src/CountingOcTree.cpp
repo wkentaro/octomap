@@ -54,23 +54,31 @@ namespace octomap {
       countingOcTreeMemberInit.ensureLinking();
    }
 
-  CountingOcTreeNode* CountingOcTree::updateNode(const point3d& value) {
-
+  CountingOcTreeNode* CountingOcTree::updateNode(
+    const point3d& value, const bool hit, const bool reset)
+  {
     OcTreeKey key;
     if (!coordToKeyChecked(value, key)) return NULL;
-    return updateNode(key);
+    return updateNode(key, hit, reset);
   }
 
-
   // Note: do not inline this method, will decrease speed (KMW)
-  CountingOcTreeNode* CountingOcTree::updateNode(const OcTreeKey& k) {
-
+  CountingOcTreeNode* CountingOcTree::updateNode(
+    const OcTreeKey& k, const bool hit, const bool reset)
+  {
     if (root == NULL) {
       root = new CountingOcTreeNode();
       tree_size++;
     }
     CountingOcTreeNode* curNode (root);
-    curNode->increaseCount();
+    if (reset) {
+      curNode->setCount(0);
+    }
+    if (hit) {
+      curNode->increaseCount();
+    } else {
+      curNode->decreaseCount();
+    }
 
 
     // follow or construct nodes down to last level...
@@ -84,7 +92,14 @@ namespace octomap {
       }
       // descent tree
       curNode = getNodeChild(curNode, pos);
-      curNode->increaseCount(); // modify traversed nodes
+      if (reset) {
+        curNode->setCount(0);
+      }
+      if (hit) {
+        curNode->increaseCount();
+      } else {
+        curNode->decreaseCount();
+      }
     }
 
     return curNode;
