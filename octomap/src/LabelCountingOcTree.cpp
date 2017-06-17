@@ -22,15 +22,15 @@ namespace octomap
     labelCountingOcTreeMemberInit.ensureLinking();
   }
 
-  LabelCountingOcTreeNode* LabelCountingOcTree::updateNode(const point3d& value, unsigned int label)
+  LabelCountingOcTreeNode* LabelCountingOcTree::updateNode(const point3d& value, int label, bool hit, bool reset)
   {
     OcTreeKey key;
     if (!coordToKeyChecked(value, key)) return NULL;
-    return updateNode(key, label);
+    return updateNode(key, label, hit, reset);
   }
 
   // Note: do not inline this method, will decrease speed (KMW)
-  LabelCountingOcTreeNode* LabelCountingOcTree::updateNode(const OcTreeKey& k, unsigned int label)
+  LabelCountingOcTreeNode* LabelCountingOcTree::updateNode(const OcTreeKey& k, int label, bool hit, bool reset)
   {
     if (root == NULL)
     {
@@ -38,7 +38,35 @@ namespace octomap
       tree_size++;
     }
     LabelCountingOcTreeNode* curNode(root);
-    curNode->increaseCount(label, n_label_);
+    if (reset)
+    {
+      curNode->setCount(std::valarray<unsigned int>(static_cast<unsigned int>(0), n_label_));
+    }
+    if (label < 0)
+    {
+      for (unsigned int l = 0; l < n_label_; l++)
+      {
+        if (hit)
+        {
+          curNode->increaseCount(l, n_label_);
+        }
+        else
+        {
+          curNode->decreaseCount(l, n_label_);
+        }
+      }
+    }
+    else
+    {
+      if (hit)
+      {
+        curNode->increaseCount(label, n_label_);
+      }
+      else
+      {
+        curNode->decreaseCount(label, n_label_);
+      }
+    }
 
     // follow or construct nodes down to last level...
     for (int i=(tree_depth-1); i>=0; i--)
@@ -52,7 +80,35 @@ namespace octomap
       }
       // descent tree
       curNode = getNodeChild(curNode, pos);
-      curNode->increaseCount(label, n_label_); // modify traversed nodes
+      if (reset)
+      {
+        curNode->setCount(std::valarray<unsigned int>(static_cast<unsigned int>(0), n_label_));
+      }
+      if (label < 0)
+      {
+        for (unsigned int l = 0; l < n_label_; l++)
+        {
+          if (hit)
+          {
+            curNode->increaseCount(l, n_label_);
+          }
+          else
+          {
+            curNode->decreaseCount(l, n_label_);
+          }
+        }
+      }
+      else
+      {
+        if (hit)
+        {
+          curNode->increaseCount(label, n_label_);
+        }
+        else
+        {
+          curNode->decreaseCount(label, n_label_);
+        }
+      }
     }
     return curNode;
   }

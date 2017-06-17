@@ -24,7 +24,27 @@ namespace octomap
     ~LabelCountingOcTreeNode();
 
     inline std::valarray<unsigned int> getCount() const { return getValue(); }
-    inline void increaseCount(unsigned int label, unsigned int n_label) {
+    inline void decreaseCount(unsigned int label, unsigned int n_label)
+    {
+      if (!is_value_initialized_)
+      {
+        value = std::valarray<unsigned int>(static_cast<unsigned int>(0), n_label);
+        is_value_initialized_ = true;
+      }
+      if (0 <= label && label < value.size())
+      {
+        if (value[label] > 0)
+        {
+          value[label]--;
+        }
+      }
+      else
+      {
+        printf("label value must satisfy: 0 <= label < %zu\n", value.size());
+      }
+    }
+    inline void increaseCount(unsigned int label, unsigned int n_label)
+    {
       if (!is_value_initialized_)
       {
         value = std::valarray<unsigned int>(static_cast<unsigned int>(0), n_label);
@@ -59,8 +79,10 @@ namespace octomap
   public:
     /// Default constructor, sets resolution of leafs
     LabelCountingOcTree(double resolution, unsigned int n_label);
-    virtual LabelCountingOcTreeNode* updateNode(const point3d& value, unsigned int label);
-    LabelCountingOcTreeNode* updateNode(const OcTreeKey& k, unsigned int label);
+    virtual LabelCountingOcTreeNode* updateNode(
+      const point3d& value, int label, const bool hit=true, const bool reset=false);
+    LabelCountingOcTreeNode* updateNode(
+      const OcTreeKey& k, int label, const bool hit=true, const bool reset=false);
     void getCentersMinHits(point3d_list& node_centers, std::vector<unsigned int>& labels, unsigned int min_hits) const;
 
   protected:
