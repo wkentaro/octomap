@@ -31,7 +31,7 @@ namespace octomap
         value = std::valarray<unsigned int>(static_cast<unsigned int>(0), n_label);
         is_value_initialized_ = true;
       }
-      if (0 <= label && label < value.size())
+      if (label < value.size())
       {
         if (value[label] > 0)
         {
@@ -50,7 +50,7 @@ namespace octomap
         value = std::valarray<unsigned int>(static_cast<unsigned int>(0), n_label);
         is_value_initialized_ = true;
       }
-      if (0 <= label && label < value.size())
+      if (label < value.size())
       {
         value[label]++;
       }
